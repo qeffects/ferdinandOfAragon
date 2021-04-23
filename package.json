@@ -1,0 +1,16 @@
+{
+  "name": "ferdinand-of-aragon",
+  "version": "1.0.0",
+  "description": "your favorite inquisitive bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "qfx",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
+    "jsonfile": "^6.1.0"
+  }
+}
