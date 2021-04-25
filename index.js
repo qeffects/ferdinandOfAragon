@@ -81,6 +81,9 @@ const onMessageHandler = (message) => {
       ? message.reply('Neslīdi man dm-os 😉')
       : null;
 
+  if (!message.member)
+    return;
+
   console.log(message.content);
 
   const gld = guilds[message.guild.id];
