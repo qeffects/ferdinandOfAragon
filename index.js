@@ -14,7 +14,8 @@ un sāc inkvizīciju ar %start
 pārtrauc inkvizīciju ar %stop
 nodzēs jautājumu rindu ar %clear
 nodzēs pēdējo pievienoto jautājumu ar %pop
-apskaties jautājumu rindu ar %queue <maximālais skaits>`,
+apskaties jautājumu rindu ar %queue <maximālais skaits>
+lai pievienotu jautājumu formas linku %questionLink <links>`,
 };
 
 const { TOKEN } = process.env;
@@ -26,10 +27,6 @@ client.login(TOKEN);
 
 const findUser = (gld, userid) => {
   return gld.guild.member(userid);
-};
-
-const findRole = (gld, roleid) => {
-  return gld.guild.roles.fetch(roleid);
 };
 
 const findChannel = (gld, channelid) => {
@@ -70,6 +67,7 @@ const saveGuild = (gld) => {
         inquisition_channel: gld.inquisition_channel,
         inquisition_role: gld.inquisition_role,
         inquisition_target: gld.inquisition_target,
+        questionLink: gld.questionLink,
         messages: gld.messages,
       },
       { flag: 'w' }
@@ -171,6 +169,12 @@ const onMessageHandler = (message) => {
       saveGuild(gld);
 
       message.channel.send(`Jautājumu rinda notīrīta`);
+    } else if (message.content.startsWith('%questionLink')) {
+      gld.questionLink = message.content.slice(14);
+
+      saveGuild(gld);
+
+      message.channel.send(`Aptaujas links pievienots!`);
     } else if (message.content.startsWith('%queue')) {
       let numToShow = (Number.parseInt(message.content.slice(7)) || 10) - 1;
 
@@ -232,7 +236,7 @@ const onMessageHandler = (message) => {
     if (message.content.startsWith('Next!')) {
       if (!gld.messages.length > 0) {
         findChannel(gld, gld.inquisition_channel).send(
-          `**Pagaidām jautājumu nav, pagaidi nedaudz, varbūt vēl būs. Jautājumus var iesūtīt šeit: **`
+          `**Pagaidām jautājumu nav, pagaidi nedaudz, varbūt vēl būs. Jautājumus var iesūtīt šeit: ${gld.questionLink}**`
         );
       }
 
@@ -271,10 +275,11 @@ client.on('ready', () => {
 client.on('guildCreate', (gld) => {
   console.log('added to a new guild');
 
-  guilds[gld.id] = { guild: gld, status: 'no-channel', messages: [] };
+  guilds[gld.id] = { guild: gld, status: 'setup', messages: [] };
 
   jsonfile.writeFile(path.resolve(storagePath, `${gld.id}.json`), {
     status: 'setup',
+    messages: [],
   });
 });
 
