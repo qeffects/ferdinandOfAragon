@@ -211,7 +211,7 @@ const onMessageHandler = (message) => {
       user.roles.add(gld.inquisition_role, 'Sākam inkvizīciju');
 
       findChannel(gld, gld.inquisition_channel).send(
-        `**Lai inkvizīcija sākas ${user}!** Nākamo jautājumu iegūstam ar "**Next!**", kad vairs inkvizīciju nevari pavilkt "**Enough!**"`
+        `**Lai inkvizīcija sākas ${user}!** Nākamo jautājumu iegūstam ar "**Next!**"`
       );
       findChannel(gld, gld.inquisition_channel).send(
         `Pirmais jautājums: **${gld.messages[0]}**`
@@ -247,19 +247,6 @@ const onMessageHandler = (message) => {
       }
       gld.messages.shift();
 
-      saveGuild(gld);
-    } else if (message.content.startsWith('Enough!')) {
-      findChannel(gld, gld.inquisition_channel).send(
-        `**Inkvizīcija neizturēta! ❎**`
-      );
-
-      gld.messages = [];
-      gld.status = 'ready';
-
-      findUser(gld, gld.inquisition_target).roles.remove(
-        gld.inquisition_role,
-        'Beidzam inkvizīciju'
-      );
       saveGuild(gld);
     }
   }
