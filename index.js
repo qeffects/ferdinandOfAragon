@@ -134,6 +134,8 @@ const onMessageHandler = (message) => {
       message.channel.send(messages.fullHelp);
     } else if (message.content.startsWith('%ask')) {
       gld.messages.push(message.content.slice(5));
+      
+      message.channel.send(`Jautājums pievienots, rindā kopā ir: ${gld.messages.length}!`);
 
       if (gld.status === 'in-progress') {
         if (
