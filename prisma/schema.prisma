@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BotConfig {
+  guild                            String  @id
+  language                         Decimal @default(0)
+  inquisition_status               Decimal @default(0)
+  inquisition_channel              String?
+  inquisition_role                 String?
+  inquisition_target               String?
+  inquisition_question_submit_link String?
+}
+
+model InquisitionQuestion {
+  id         Int      @id @default(autoincrement())
+  guild      String
+  question   String
+  created_at DateTime @default(now())
+}
