@@ -1,3 +1,32 @@
-node_modules/*
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+
+# API keys and secrets
 .env
-storage/*
+
+# Dependency directory
+node_modules
+
+# Editors
+.idea
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Ignore built ts files
+dist/**/*
+
+# Ignore yarn.lock
+yarn.lock
+
+# Ignore DB
+db/Bot.db
