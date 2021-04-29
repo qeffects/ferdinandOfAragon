@@ -23,6 +23,11 @@ WORKDIR /usr/src/app
 COPY --from=builder node_modules node_modules
 COPY --from=builder dist/. .
 
+COPY prisma prisma
+
+COPY ./scripts/start.sh .
+RUN chmod +x ./start.sh
+
 USER node
 
-CMD ["node","index.js"]
+CMD ["./start.sh"]
