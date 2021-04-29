@@ -8,13 +8,14 @@ datasource db {
 }
 
 model BotConfig {
-  guild                            String  @id
-  language                         Decimal @default(0)
-  inquisition_status               Decimal @default(0)
-  inquisition_channel              String?
-  inquisition_role                 String?
-  inquisition_target               String?
-  inquisition_question_submit_link String?
+  guild                                String  @id
+  language                             Decimal @default(0)
+  inquisition_status                   Decimal @default(0)
+  inquisition_channel                  String?
+  inquisition_role                     String?
+  inquisition_target                   String?
+  inquisition_question_submit_link     String?
+  inquisition_no_more_questions_msg_id String?
 }
 
 model InquisitionQuestion {

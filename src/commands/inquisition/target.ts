@@ -1,7 +1,8 @@
-import { BotCommand } from '../../types';
+import { BotCommand, InquisitionStatus } from '../../types';
 import prisma from '../../prisma';
 import logger from '../../util/logger';
 import { translate } from '../../lang/i18n';
+import { DISCORD_BOT_PREFIX } from '../../util/secrets';
 
 const targetCommand: BotCommand = {
   name: 'target',
@@ -18,7 +19,7 @@ const targetCommand: BotCommand = {
       return;
     }
 
-    await prisma.botConfig.update({
+    const updatedBotConfig = await prisma.botConfig.update({
       where: {
         guild: message.guild.id,
       },
@@ -32,6 +33,25 @@ const targetCommand: BotCommand = {
         target: mentionedMember.id,
       })
     );
+
+    if (
+      updatedBotConfig.inquisition_channel &&
+      updatedBotConfig.inquisition_role &&
+      updatedBotConfig.inquisition_target
+    ) {
+      await prisma.botConfig.update({
+        where: {
+          guild: message.guild.id,
+        },
+        data: {
+          inquisition_status: InquisitionStatus.READY,
+        },
+      });
+
+      await message.channel.send(
+        translate('INQUISITION_READY', { prefix: DISCORD_BOT_PREFIX })
+      );
+    }
   },
 };
 

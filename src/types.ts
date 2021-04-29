@@ -37,5 +37,4 @@ export enum InquisitionStatus {
   SETUP,
   READY,
   IN_PROGRESS,
-  STOPPED,
 }

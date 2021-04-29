@@ -33,13 +33,14 @@ const inqRoleCommand: BotCommand = {
 
     await message.channel.send(
       translate('INQUISITION_SET_ROLE_SUCCESS', {
-        roleId: `<@${mentionedRole.id}>`,
+        roleId: mentionedRole.name,
       })
     );
 
     if (
       updatedBotConfig.inquisition_channel &&
-      updatedBotConfig.inquisition_role
+      updatedBotConfig.inquisition_role &&
+      updatedBotConfig.inquisition_target
     ) {
       await prisma.botConfig.update({
         where: {

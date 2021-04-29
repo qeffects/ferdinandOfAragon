@@ -45,7 +45,7 @@ export default {
     INQUISITION_CHANNEL_INVALID:
       'Nederīgs inkvizīcijas kanāls, lūdzu mēģini to uzstādīt no jauna',
     INQUISITION_NO_MORE_QUESTIONS_LEFT:
-      '**Pagaidām jautājumu nav, pagaidi nedaudz, varbūt vēl būs. Jautājumus var iesūtīt šeit: {{questionLink}}**',
+      '**Pagaidām jautājumu nav, pagaidi nedaudz, varbūt vēl būs. Jautājumus var iesūtīt šeit: {{- questionLink}}**',
     INQUISITION_NEXT_QUESTION_DESCRIPTION: 'Saņemt nākoši jautājumu',
     BOT_CONFIG_INQUISITION_ROLE_NOT_SET: 'Lūdzu uzstādi inkvizīcijas role',
     BOT_CONFIG_INQUISITION_CHANNEL_NOT_SET: 'Lūdzu uzstādi inkvizīcijas kanālu',
@@ -55,5 +55,7 @@ export default {
       'Uzstādi linku kur cilvēki var postot jautājumus',
     INQUISITION_SET_QUESTION_LINK_NO_LINK:
       'Neizdevās uzstādīt saiti, lūdzu mēģini vēlreiz',
+    INQUISITION_SET_QUESTION_LINK_SUCCESS:
+      'Jautājumu formas saite veiksmīgi uzstādīta',
   },
 } as const;

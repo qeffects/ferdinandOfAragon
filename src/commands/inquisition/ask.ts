@@ -1,5 +1,3 @@
-import { Decimal } from '@prisma/client/runtime';
-
 import { translate } from '../../lang/i18n';
 import prisma from '../../prisma';
 
@@ -41,8 +39,9 @@ const askCommand: BotCommand = {
     }
 
     if (
-      botConfig.inquisition_status ===
-      <Decimal>(<unknown>InquisitionStatus.IN_PROGRESS)
+      botConfig.inquisition_status.toNumber() ===
+        InquisitionStatus.IN_PROGRESS &&
+      allQuestionCount === 1
     ) {
       const inquisitionChannel = message.guild.channels.resolve(
         botConfig.inquisition_channel
@@ -53,20 +52,25 @@ const askCommand: BotCommand = {
         return;
       }
 
-      const lastInquisitionChannelMessage = inquisitionChannel.lastMessage;
+      if (botConfig.inquisition_no_more_questions_msg_id) {
+        const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
+          botConfig.inquisition_no_more_questions_msg_id
+        );
 
-      if (
-        allQuestionCount === 1 &&
-        lastInquisitionChannelMessage.author.id === message.client.user.id &&
-        lastInquisitionChannelMessage.content.startsWith(
-          '**Pagaidām jautājumu nav'
-        )
-      ) {
-        await lastInquisitionChannelMessage.delete();
-        await inquisitionChannel.send(`**${question}**`);
+        await lastNoMoreQuestionsMessage?.delete();
 
-        saveQuestion = false;
+        await prisma.botConfig.update({
+          where: {
+            guild: message.guild.id,
+          },
+          data: {
+            inquisition_no_more_questions_msg_id: null,
+          },
+        });
       }
+
+      await inquisitionChannel.send(`**${question}**`);
+      saveQuestion = false;
     }
 
     if (saveQuestion) {
