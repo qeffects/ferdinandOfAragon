@@ -78,6 +78,14 @@ const nextCommand: BotCommand = {
     });
 
     if (!question) {
+      if (botConfig.inquisition_no_more_questions_msg_id) {
+        const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
+          botConfig.inquisition_no_more_questions_msg_id
+        );
+
+        await lastNoMoreQuestionsMessage?.delete();
+      }
+
       const noMoreQuestionsLeftMessage = await inquisitionChannel.send(
         translate('INQUISITION_NO_MORE_QUESTIONS_LEFT', {
           questionLink: botConfig.inquisition_question_submit_link,

@@ -39,9 +39,10 @@ const askCommand: BotCommand = {
     }
 
     if (
+      allQuestionCount === 1 &&
       botConfig.inquisition_status.toNumber() ===
         InquisitionStatus.IN_PROGRESS &&
-      allQuestionCount === 1
+      botConfig.inquisition_no_more_questions_msg_id
     ) {
       const inquisitionChannel = message.guild.channels.resolve(
         botConfig.inquisition_channel
@@ -52,22 +53,20 @@ const askCommand: BotCommand = {
         return;
       }
 
-      if (botConfig.inquisition_no_more_questions_msg_id) {
-        const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
-          botConfig.inquisition_no_more_questions_msg_id
-        );
+      const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
+        botConfig.inquisition_no_more_questions_msg_id
+      );
 
-        await lastNoMoreQuestionsMessage?.delete();
+      await lastNoMoreQuestionsMessage?.delete();
 
-        await prisma.botConfig.update({
-          where: {
-            guild: message.guild.id,
-          },
-          data: {
-            inquisition_no_more_questions_msg_id: null,
-          },
-        });
-      }
+      await prisma.botConfig.update({
+        where: {
+          guild: message.guild.id,
+        },
+        data: {
+          inquisition_no_more_questions_msg_id: null,
+        },
+      });
 
       await inquisitionChannel.send(`**${question}**`);
       saveQuestion = false;
