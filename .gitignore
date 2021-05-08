@@ -30,3 +30,4 @@ yarn.lock
 
 # Ignore DB
 db/Bot.db
+db/Bot.db-journal

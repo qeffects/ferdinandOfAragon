@@ -28,21 +28,40 @@ const stopCommand: BotCommand = {
       },
     });
 
+    if (botConfig.inquisition_target && botConfig.inquisition_role) {
+      const member = await message.guild.member(botConfig.inquisition_target);
+
+      if (member?.roles.cache.has(botConfig.inquisition_role)) {
+        member.roles.remove(botConfig.inquisition_role, 'Beidzam inkvizīciju');
+      }
+    }
+
+    if (
+      botConfig.inquisition_channel &&
+      botConfig.inquisition_no_more_questions_msg_id
+    ) {
+      const inquisitionChannel = await message.guild.channels.resolve(
+        botConfig.inquisition_channel
+      );
+
+      if (inquisitionChannel?.isText()) {
+        const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
+          botConfig.inquisition_no_more_questions_msg_id
+        );
+        await lastNoMoreQuestionsMessage.delete();
+      }
+    }
+
     await prisma.botConfig.update({
       where: {
         guild: message.guild.id,
       },
       data: {
+        inquisition_no_more_questions_msg_id: null,
         inquisition_status: InquisitionStatus.READY,
         quick_inquisition_status: InquisitionStatus.READY,
       },
     });
-
-    const member = await message.guild.member(botConfig.inquisition_target);
-
-    if (member) {
-      member.roles.remove(botConfig.inquisition_role, 'Beidzam inkvizīciju');
-    }
 
     await message.channel.send(`Inkvizīcija apstādināta`);
   },

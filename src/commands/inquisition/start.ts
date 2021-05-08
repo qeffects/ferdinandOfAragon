@@ -68,6 +68,12 @@ const startCommand: BotCommand = {
       },
     });
 
+    const allQuestionCount = await prisma.inquisitionQuestion.count({
+      where: {
+        guild: message.guild.id,
+      },
+    });
+
     if (!firstQuestion) {
       await message.reply(translate('INQUISITION_START_NO_QUESTIONS', {}));
       return;
@@ -92,7 +98,7 @@ const startCommand: BotCommand = {
 
     await message.channel.send(
       translate('INQUISITION_START_SUCCESS', {
-        questionCount: firstQuestion.question,
+        questionCount: `${allQuestionCount}`,
       })
     );
 
@@ -102,22 +108,14 @@ const startCommand: BotCommand = {
       },
     });
 
-    const remainingQuestionCount = await prisma.inquisitionQuestion.count({
+    await prisma.botConfig.update({
       where: {
         guild: message.guild.id,
       },
+      data: {
+        inquisition_status: InquisitionStatus.IN_PROGRESS,
+      },
     });
-
-    if (remainingQuestionCount > 0) {
-      await prisma.botConfig.update({
-        where: {
-          guild: message.guild.id,
-        },
-        data: {
-          inquisition_status: InquisitionStatus.IN_PROGRESS,
-        },
-      });
-    }
   },
 };
 

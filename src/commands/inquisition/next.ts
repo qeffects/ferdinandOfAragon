@@ -10,6 +10,10 @@ const nextCommand: BotCommand = {
   guildOnly: true,
   withPrefix: false,
   async execute(message) {
+    // Since these is command which can be called without prefix -
+    // avoid doing something silly, and don't respond if some part of the bot is not configured
+    // or message is coming from some other channel than inquisition channel
+
     logger.debug('next');
 
     const botConfig = await prisma.botConfig.findFirst({
@@ -18,8 +22,22 @@ const nextCommand: BotCommand = {
       },
     });
 
-    if (!botConfig) {
-      await message.reply(translate('BOT_CONFIG_NOT_FOUND', {}));
+    // First of all lets check if everything is setup for inquisition to happen
+    if (
+      !botConfig ||
+      !botConfig.inquisition_channel ||
+      !botConfig.inquisition_role ||
+      !botConfig.inquisition_target
+    ) {
+      return;
+    }
+
+    const inquisitionChannel = message.guild.channels.resolve(
+      botConfig.inquisition_channel
+    );
+
+    // Is inquisitionChannel valid and message is coming from from it?
+    if (!inquisitionChannel || message.channel.id !== inquisitionChannel.id) {
       return;
     }
 
@@ -27,31 +45,26 @@ const nextCommand: BotCommand = {
       botConfig.inquisition_role
     );
 
-    if (!inquisitionRole) {
-      await message.reply(translate('INQUISITION_ROLE_INVALID', {}));
-      return;
-    }
-
+    // Is inquisition role valid and message author has it?
     if (
+      !inquisitionRole ||
       !message.guild
         .member(message.author.id)
         .roles.cache.has(inquisitionRole.id)
     ) {
+      if (!inquisitionRole) {
+        logger.warn(`Role with id ${botConfig.inquisition_role} not found`);
+        return;
+      }
+
+      logger.warn(
+        `${message.author.username} does not have ${inquisitionRole.name} role`
+      );
       return;
     }
 
-    const inquisitionChannel = await message.guild.channels.resolve(
-      botConfig.inquisition_channel
-    );
-
-    if (!inquisitionChannel?.isText()) {
+    if (!inquisitionChannel.isText()) {
       await message.reply(translate('INQUISITION_CHANNEL_INVALID', {}));
-      return;
-    }
-
-    // Since these is command which can be called without prefix -
-    // avoid doing something silly, if phrase "Next!" came from some other channel :)
-    if (message.channel.id !== inquisitionChannel.id) {
       return;
     }
 
@@ -65,11 +78,29 @@ const nextCommand: BotCommand = {
     });
 
     if (!question) {
-      await inquisitionChannel.send(
+      if (botConfig.inquisition_no_more_questions_msg_id) {
+        const lastNoMoreQuestionsMessage = inquisitionChannel.messages.resolve(
+          botConfig.inquisition_no_more_questions_msg_id
+        );
+
+        await lastNoMoreQuestionsMessage?.delete();
+      }
+
+      const noMoreQuestionsLeftMessage = await inquisitionChannel.send(
         translate('INQUISITION_NO_MORE_QUESTIONS_LEFT', {
           questionLink: botConfig.inquisition_question_submit_link,
         })
       );
+
+      await prisma.botConfig.update({
+        where: {
+          guild: message.guild.id,
+        },
+        data: {
+          inquisition_no_more_questions_msg_id: noMoreQuestionsLeftMessage.id,
+        },
+      });
+
       return;
     }
 

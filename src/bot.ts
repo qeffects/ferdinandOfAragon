@@ -66,11 +66,11 @@ export default async (): Promise<void> => {
   const client: BotClient = new Discord.Client({
     presence: {
       activity: {
-        name: '!help',
+        name: 'inquisition',
       },
     },
     ws: {
-      intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS'],
+      intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES'],
     },
   });
 

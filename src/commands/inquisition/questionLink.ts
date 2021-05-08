@@ -28,6 +28,8 @@ const questionLinkCommand: BotCommand = {
         inquisition_question_submit_link: link.trim(),
       },
     });
+
+    await message.reply(translate('INQUISITION_SET_QUESTION_LINK_SUCCESS', {}));
   },
 };
 

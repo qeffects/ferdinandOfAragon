@@ -41,7 +41,8 @@ const inqChannelCommand: BotCommand = {
 
     if (
       updatedBotConfig.inquisition_channel &&
-      updatedBotConfig.inquisition_role
+      updatedBotConfig.inquisition_role &&
+      updatedBotConfig.inquisition_target
     ) {
       await prisma.botConfig.update({
         where: {
