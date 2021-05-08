@@ -11,7 +11,7 @@ const inqRoleCommand: BotCommand = {
   args: true,
   permissions: ['ADMINISTRATOR'],
   async execute(message) {
-    logger.debug('inqRoleCommand called...');
+    logger.debug(`inqRoleCommand called ${message}`);
     const mentionedRole = message.mentions.roles.first();
 
     if (!mentionedRole) {
@@ -33,7 +33,7 @@ const inqRoleCommand: BotCommand = {
 
     await message.channel.send(
       translate('INQUISITION_SET_ROLE_SUCCESS', {
-        roleId: `<@${mentionedRole.id}>`,
+        roleId: `${mentionedRole.id}`,
       })
     );
 

@@ -14,6 +14,12 @@ const clearCommand: BotCommand = {
       },
     });
 
+    await prisma.quickQuestion.deleteMany({
+      where: {
+        guild: message.guild.id,
+      },
+    });
+
     await message.reply(translate('INQUISITION_CLEAR_QUESTIONS_SUCCESS', {}));
   },
 };

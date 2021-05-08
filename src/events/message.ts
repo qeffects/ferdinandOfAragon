@@ -4,6 +4,7 @@ import { DISCORD_BOT_PREFIX } from '../util/secrets';
 import logger from '../util/logger';
 import { BotEvent, BotClient } from '../types';
 import { translate } from '../lang/i18n';
+import quickAnswer from './quickAnswer';
 
 const messageEvent: BotEvent = {
   name: 'message',
@@ -12,6 +13,10 @@ const messageEvent: BotEvent = {
       client: BotClient;
     }
   ) {
+    await quickAnswer(message);
+
+    logger.debug(`${message}`);
+
     const validPrefixes = [
       `(<@!?${message.client.user.id}>`,
       DISCORD_BOT_PREFIX,

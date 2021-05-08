@@ -34,6 +34,7 @@ const stopCommand: BotCommand = {
       },
       data: {
         inquisition_status: InquisitionStatus.READY,
+        quick_inquisition_status: InquisitionStatus.READY,
       },
     });
 

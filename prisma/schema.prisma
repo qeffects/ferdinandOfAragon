@@ -15,11 +15,20 @@ model BotConfig {
   inquisition_role                 String?
   inquisition_target               String?
   inquisition_question_submit_link String?
+  quick_inquisition_status         Decimal @default(0)
 }
 
 model InquisitionQuestion {
   id         Int      @id @default(autoincrement())
   guild      String
   question   String
+  created_at DateTime @default(now())
+}
+
+model QuickQuestion {
+  id         Int      @id @default(autoincrement())
+  guild      String
+  question   String
+  target     String
   created_at DateTime @default(now())
 }

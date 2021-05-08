@@ -25,7 +25,7 @@ export default {
     INQUISITION_SET_ROLE_DESCRIPTION: 'Uztādi inkvizīcijas roli',
     INQUISITION_SET_ROLE_NO_ROLE:
       'Neizdevās uzstādīt inkvizīcijas roli, lūdzu mēģini vēlreiz',
-    INQUISITION_SET_ROLE_SUCCESS: 'Inkvizīcijas role uzstādīta {{roleId}}',
+    INQUISITION_SET_ROLE_SUCCESS: 'Inkvizīcijas role uzstādīta <@&{{roleId}}>',
     INQUISITION_SET_TARGET_DESCRIPTION: 'Izvēlies inkvizējamo',
     INQUISITION_SET_TARGET_NO_TARGET:
       'Neizdevās uzstādīt inkvizējamo, lūdzu mēģini vēlreiz',
@@ -55,5 +55,13 @@ export default {
       'Uzstādi linku kur cilvēki var postot jautājumus',
     INQUISITION_SET_QUESTION_LINK_NO_LINK:
       'Neizdevās uzstādīt saiti, lūdzu mēģini vēlreiz',
+    INQUISITION_QUICK_QUESTIONS_DESCRIPTION:
+      'Uzdod jautājumu quick fire inkvizīcijai, ziņas sākumā ietago lietotāju',
+    INQUISITION_QUICK_QUESTIONS_SUCCESS:
+      'Jautājums ātrajai inkvizīcijai uzdots',
+    INQUISITION_QUICK_QUESTIONS_NOUSER: 'Jautājuma sākumā jātego lietotājs',
+    INQUISITION_QUICK_START_ANNOUNCEMENT:
+      '**Lai free-for-all inkvizīcija sākas!** Katram ir iespēja atbildēt ar vienu ziņu, atbildes nemaināmas!',
+    INQUISITION_QUICK_START_SUCCESS: 'Free for all inkvizīcija iesākta!',
   },
 } as const;
